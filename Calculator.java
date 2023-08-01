@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
+
 public class Calculator extends JFrame implements ActionListener {
     private JTextField inputField;
     private JButton[] numberButtons;
@@ -16,62 +18,59 @@ public class Calculator extends JFrame implements ActionListener {
         currentExpression = "";
 
         // Create and configure the JFrame
-        setTitle("Lab3.Calculator");
-        setSize(400,400);
+        setTitle("Prashant Calculator");
+        setSize(400, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(null);
+        setLayout(new BorderLayout());
 
         // Create the input field
         inputField = new JTextField();
-        inputField.setBounds(0, 0, 400, 55);
         inputField.setEditable(false);
-        add(inputField);
+        inputField.setFont(new Font("Arial", Font.PLAIN, 36));
+        inputField.setHorizontalAlignment(JTextField.RIGHT);
+        add(inputField, BorderLayout.NORTH);
+
+        // Create the button panel
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 4, 5, 5));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Create the number buttons
-        JPanel panel = new JPanel(new GridLayout(4, 4));
-        panel.setBounds(0,55,400,300);
         numberButtons = new JButton[10];
         for (int i = 0; i < 10; i++) {
-            numberButtons[i] = new JButton(String.valueOf(i));
+            numberButtons[i] = createButton(String.valueOf(i), Color.BLACK, Color.WHITE);
             numberButtons[i].addActionListener(this);
 
+            buttonPanel.add(numberButtons[i]);
         }
+
+        // Create the operator buttons
         operatorButtons = new JButton[5];
         String[] operatorSymbols = {"+", "-", "*", "/"};
         for (int i = 0; i < operatorSymbols.length; i++) {
-            operatorButtons[i] = new JButton(operatorSymbols[i]);
+            operatorButtons[i] = createButton(operatorSymbols[i], Color.BLACK, Color.GRAY);
             operatorButtons[i].addActionListener(this);
+            buttonPanel.add(operatorButtons[i]);
         }
 
-        panel.add(numberButtons[7]);
-        panel.add(numberButtons[8]);
-        panel.add(numberButtons[9]);
-        // Create the clear button
-        clearButton = new JButton("C");
+        // Create the clear and equals buttons
+        clearButton = createButton("C", Color.WHITE, Color.GRAY);
         clearButton.addActionListener(this);
-        panel.add(clearButton);
-        panel.add(numberButtons[4]);
-        panel.add(numberButtons[5]);
-        panel.add(numberButtons[6]);
+        buttonPanel.add(clearButton);
 
-        panel.add(operatorButtons[0]);
-
-        panel.add(numberButtons[1]);
-        panel.add(numberButtons[2]);
-        panel.add(numberButtons[3]);
-
-        panel.add(operatorButtons[1]);
-        panel.add(operatorButtons[2]);
-
-        panel.add(numberButtons[0]);
-        panel.add(operatorButtons[3]);
-
-        // Create the equals button
-        equalsButton = new JButton("=");
+        equalsButton = createButton("=", Color.WHITE, Color.BLUE);
         equalsButton.addActionListener(this);
-        panel.add(equalsButton);
-        add(panel);
+        buttonPanel.add(equalsButton);
+
+        add(buttonPanel, BorderLayout.CENTER);
         setVisible(true);
+    }
+
+    private JButton createButton(String label, Color foreground, Color background) {
+        JButton button = new JButton(label);
+        button.setForeground(foreground);
+        button.setBackground(background);
+        button.setFont(new Font("Arial", Font.BOLD, 32));
+        return button;
     }
 
     public void actionPerformed(ActionEvent e) {
